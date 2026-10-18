@@ -1,0 +1,1103 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{mathdots}
+\usepackage{mathrsfs}
+\usepackage[all]{xy}
+\usepackage[pdftex]{graphicx}
+\usepackage{color}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{indent first}
+\usepackage[labelfont=bf,labelsep=period,justification=raggedright]{caption}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{tkz-fct}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usetikzlibrary{patterns}
+\usetikzlibrary{calc}
+\usetikzlibrary{knots}
+\usetikzlibrary{spath3, intersections, hobby}
+\usetikzlibrary{arrows, automata}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{shapes.multipart}
+\usepackage{pgfplots}
+\usepackage{multicol}
+\PassOptionsToPackage{dvipsnames,svgnames}{xcolor}
+\usepackage{textcomp}
+\usepackage{bbm}
+\usepackage{array}
+\newcolumntype{C}{>{$}c<{$}}
+\usepackage{forest}
+\usepackage{tikzsymbols}
+\usetikzlibrary{3d}
+\tdplotsetmaincoords{80}{110}
+\usepackage{worldflags}
+\usepackage{youngtab}
+\usepackage{tikzducks}
+
+\makeatletter
+\DeclareFontFamily{OMX}{MnSymbolE}{}
+\DeclareSymbolFont{MnLargeSymbols}{OMX}{MnSymbolE}{m}{n}
+\SetSymbolFont{MnLargeSymbols}{bold}{OMX}{MnSymbolE}{b}{n}
+\DeclareFontShape{OMX}{MnSymbolE}{m}{n}{
+    <-6>  MnSymbolE5
+   <6-7>  MnSymbolE6
+   <7-8>  MnSymbolE7
+   <8-9>  MnSymbolE8
+   <9-10> MnSymbolE9
+  <10-12> MnSymbolE10
+  <12->   MnSymbolE12
+}{}
+\DeclareFontShape{OMX}{MnSymbolE}{b}{n}{
+    <-6>  MnSymbolE-Bold5
+   <6-7>  MnSymbolE-Bold6
+   <7-8>  MnSymbolE-Bold7
+   <8-9>  MnSymbolE-Bold8
+   <9-10> MnSymbolE-Bold9
+  <10-12> MnSymbolE-Bold10
+  <12->   MnSymbolE-Bold12
+}{}
+
+\let\llangle\@undefined
+\let\rrangle\@undefined
+\DeclareMathDelimiter{\llangle}{\mathopen}%
+                     {MnLargeSymbols}{'164}{MnLargeSymbols}{'164}
+\DeclareMathDelimiter{\rrangle}{\mathclose}%
+                     {MnLargeSymbols}{'171}{MnLargeSymbols}{'171}
+\makeatother
+
+\makeatletter
+\tikzoption{canvas is xy plane at z}[]{%
+  \def\tikz@plane@origin{\pgfpointxyz{0}{0}{#1}}%
+  \def\tikz@plane@x{\pgfpointxyz{1}{0}{#1}}%
+  \def\tikz@plane@y{\pgfpointxyz{0}{1}{#1}}%
+  \tikz@canvas@is@plane
+}
+\makeatother
+
+\tikzset{surface/.style={draw=black, left color=orange,right color=orange,middle
+color=orange!60!#1, fill opacity=1},surface/.default=white}
+
+\newcommand{\coneback}[4][]{
+  %% start at the correct point on the circle, draw the arc, then draw to the origin of the diagram, then close the path
+  \draw[canvas is xy plane at z=#2, #1] (\tdplotmainphi-#4:#3) 
+  arc(\tdplotmainphi-#4:\tdplotmainphi+180+#4:#3) -- (O) --cycle;
+  }
+\newcommand{\conefront}[4][]{
+  \draw[canvas is xy plane at z=#2, #1] (\tdplotmainphi-#4:#3) arc
+  (\tdplotmainphi-#4:\tdplotmainphi-180+#4:#3) -- (O) --cycle;
+  }
+
+\newcommand{\conetruncback}[6][]{
+  \draw[line join=round,#1] plot[variable=\t,domain=\tdplotmainphi-#4:\tdplotmainphi+180+#4] 
+  ({#3*cos(\t)},{#3*sin(\t)},#2)
+  -- plot[variable=\t,domain=\tdplotmainphi+180-#4:\tdplotmainphi+#4] 
+  ({#6*cos(\t)},{#6*sin(\t)},#5)
+  --cycle;
+  }
+
+\newcommand{\conetruncfront}[6][]{
+  \draw[line join=round,#1] plot[variable=\t,domain=\tdplotmainphi-#4:\tdplotmainphi-180+#4] 
+  ({#3*cos(\t)},{#3*sin(\t)},#2)
+  -- plot[variable=\t,domain=\tdplotmainphi-180-#4:\tdplotmainphi+#4] 
+  ({#6*cos(\t)},{#6*sin(\t)},#5)
+  --cycle;
+  }
+
+\pgfplotsset{compat=1.17}
+
+% \topmargin 0.4cm
+% \oddsidemargin 0.5cm
+% \evensidemargin 0.5cm
+% \textwidth 14cm 
+% \textheight 20.2cm
+
+% \setlength{\oddsidemargin}{0.25in}
+% \setlength{\evensidemargin}{0.25in}
+% \setlength{\textwidth}{6in}
+%\setlength{\topmargin}{-0.25in}
+%\setlength{\textheight}{8in}
+
+\DeclareMathOperator{\ab}{ab}
+\DeclareMathOperator{\Area}{Area}
+\DeclareMathOperator{\atan}{atan}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\BGL}{BGL}
+\DeclareMathOperator{\Br}{Br}
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\Char}{char}
+\DeclareMathOperator{\CHur}{CHur}
+\DeclareMathOperator{\Cl}{Cl}
+\DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\Conf}{Conf}
+\DeclareMathOperator{\Cyc}{\textsc{Cyc}}
+\DeclareMathOperator{\disc}{disc}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\et}{\text{\'et}}
+\DeclareMathOperator{\even}{even}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Hur}{Hur}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\Ind}{Ind}
+\DeclareMathOperator{\Inn}{Inn}
+\DeclareMathOperator{\Int}{int}
+\DeclareMathOperator{\Irr}{Irr}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\mix}{mix}
+\DeclareMathOperator{\Mor}{Mor}
+\DeclareMathOperator{\MSet}{\textsc{MSet}}
+\DeclareMathOperator{\odd}{odd}
+\DeclareMathOperator{\ord}{ord}
+\DeclareMathOperator{\Out}{Out}
+\DeclareMathOperator{\Perm}{Perm}
+\DeclareMathOperator{\PGL}{PGL}
+\DeclareMathOperator{\Pin}{Pin}
+\DeclareMathOperator{\PSet}{\textsc{PSet}}
+\DeclareMathOperator{\PSL}{PSL}
+\DeclareMathOperator{\rad}{rad}
+\DeclareMathOperator{\rel}{rel}
+\DeclareMathOperator{\Root}{root}
+\DeclareMathOperator{\sech}{sech}
+\DeclareMathOperator{\Seq}{\textsc{Seq}}
+\DeclareMathOperator{\Set}{\textsc{Set}}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\Spin}{Spin}
+\DeclareMathOperator{\St}{St}
+\DeclareMathOperator{\Surj}{Surj}
+\DeclareMathOperator{\Syl}{Syl}
+\DeclareMathOperator{\tame}{tame}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\TV}{TV}
+\DeclareMathOperator{\UCyc}{\textsc{UCyc}}
+\DeclareMathOperator{\Var}{Var}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\QED}{\hspace{\stretch{1}} $\blacksquare$}
+\renewcommand{\AA}{\mathbb{A}}
+\newcommand{\BB}{\mathbb{B}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\HH}{\mathbb{H}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\OO}{\mathbb{O}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\renewcommand{\SS}{\mathbb{S}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\bfa}{\mathbf{a}}
+\newcommand{\bfb}{\mathbf{b}}
+\newcommand{\bfc}{\mathbf{c}}
+\newcommand{\bfd}{\mathbf{d}}
+\newcommand{\bfe}{\mathbf{e}}
+\newcommand{\bfm}{\mathbf{m}}
+\newcommand{\bfn}{\mathbf{n}}
+\newcommand{\bfN}{\mathbf{N}}
+\newcommand{\bfp}{\mathbf{p}}
+\newcommand{\bfq}{\mathbf{q}}
+\newcommand{\bft}{\mathbf{t}}
+\newcommand{\bfv}{\mathbf{v}}
+\newcommand{\bfw}{\mathbf{w}}
+\newcommand{\mcA}{\mathcal{A}}
+\newcommand{\mcB}{\mathcal{B}}
+\newcommand{\mcC}{\mathcal{C}}
+\newcommand{\mcD}{\mathcal{D}}
+\newcommand{\mcE}{\mathcal{E}}
+\newcommand{\mcF}{\mathcal{F}}
+\newcommand{\mcG}{\mathcal{G}}
+\newcommand{\mcH}{\mathcal{H}}
+\newcommand{\mcI}{\mathcal{I}}
+\newcommand{\mcJ}{\mathcal{J}}
+\newcommand{\mcK}{\mathcal{K}}
+\newcommand{\mcL}{\mathcal{L}}
+\newcommand{\mcM}{\mathcal{M}}
+\newcommand{\mcN}{\mathcal{N}}
+\newcommand{\mcO}{\mathcal{O}}
+\newcommand{\mcP}{\mathcal{P}}
+\newcommand{\mcQ}{\mathcal{Q}}
+\newcommand{\mcR}{\mathcal{R}}
+\newcommand{\mcS}{\mathcal{S}}
+\newcommand{\mcT}{\mathcal{T}}
+\newcommand{\mcU}{\mathcal{U}}
+\newcommand{\mcW}{\mathcal{W}}
+\newcommand{\mcX}{\mathcal{X}}
+\newcommand{\mcY}{\mathcal{Y}}
+\newcommand{\mcZ}{\mathcal{Z}}
+\newcommand{\mfa}{\mathfrak{a}}
+\newcommand{\mfb}{\mathfrak{b}}
+\newcommand{\mfc}{\mathfrak{c}}
+\newcommand{\mfI}{\mathfrak{I}}
+\newcommand{\mfK}{\mathfrak{K}}
+\newcommand{\mfM}{\mathfrak{M}}
+\newcommand{\mfm}{\mathfrak{m}}
+\newcommand{\mfo}{\mathfrak{o}}
+\newcommand{\mfO}{\mathfrak{O}}
+\newcommand{\mfP}{\mathfrak{P}}
+\newcommand{\mfp}{\mathfrak{p}}
+\newcommand{\mfq}{\mathfrak{q}}
+\newcommand{\mfz}{\mathfrak{z}}
+\newcommand{\msC}{\mathscr{C}}
+\newcommand{\msP}{\mathscr{P}}
+\newcommand{\AGL}{\mathbb{A}\GL}
+\newcommand{\Qbar}{\overline{\QQ}}
+\renewcommand{\qedsymbol}{$\blacksquare$}
+\newcommand{\bbone}{\mathbbm{1}}
+
+\newcommand{\bgamma}{\boldsymbol{\gamma}}
+\newcommand{\bdelta}{\boldsymbol{\delta}}
+\newcommand{\bpi}{\boldsymbol{\pi}}
+\newcommand{\bsigma}{\boldsymbol{\sigma}}
+
+\newcommand\TikCircle[1][2.5]{{\mathop{\tikz[baseline=-#1]{\draw[thick](0,0)circle[radius=#1mm];}}}}
+
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+
+\DeclareRobustCommand{\sstirling}{\genfrac\{\}{0pt}{}}
+\DeclareRobustCommand{\fstirling}{\genfrac[]{0pt}{}}
+\def\multiset#1#2{\ensuremath{\left(\kern-.3em\left(\genfrac{}{}{0pt}{}{#1}{#2}\right)\kern-.3em\right)}}
+\DeclareRobustCommand{\eulerian}{\genfrac\langle\rangle{0pt}{}}
+
+\newcommand{\planefig}[2] {
+\filldraw[shift={#1},rotate=#2] (.4,.3) circle (2pt);
+\filldraw[shift={#1},rotate=#2] (-.4,.3) circle (2pt);
+\draw[shift={#1},rotate=#2] (-20:.55) arc (-20:-160:.55);
+\draw[shift={#1},rotate=#2] (0,0) circle (1cm);
+}
+
+\makeatletter
+\let\pgfnodeparttrbox\pgfnodeparttwobox
+\let\pgfnodepartblbox\pgfnodepartthreebox
+\let\pgfnodepartbrbox\pgfnodepartfourbox
+\newif\ifpgfcirclecrosssplitcustomfill
+\tikzset{%
+  circle cross split part fill/.code=\def\pgf@lib@sh@ccs@list@fill{#1}\pgfcirclecrosssplitcustomfilltrue,%
+  circle cross split uses custom fill/.is if=pgfcirclecrosssplitcustomfill}
+\pgfdeclareshape{circle cross split}{%
+  \nodeparts{text,two,three,four}%
+  \savedanchor\centerpoint{%
+    \pgfmathsetlength\pgf@xa{\pgfkeysvalueof{/pgf/inner xsep}}%
+    \pgfmathsetlength\pgf@ya{\pgfkeysvalueof{/pgf/inner ysep}}%
+    \pgf@x\wd\pgfnodeparttextbox
+    \pgf@yb\dp\pgfnodeparttextbox
+    \pgf@yc\dp\pgfnodeparttwobox
+    \ifdim\pgf@yb>\pgf@yc
+      \pgf@yc\pgf@yb
+    \fi
+    \advance\pgf@y-\pgf@yc
+    \advance\pgf@x\pgf@xa
+    \advance\pgf@y-\pgf@ya
+    \advance\pgf@x.5\pgflinewidth
+    \advance\pgf@y-.5\pgflinewidth
+  }%
+  \savedanchor\twoanchor{%
+    \pgfmathsetlength\pgf@xa{\pgfkeysvalueof{/pgf/inner xsep}}%
+    \pgfmathsetlength\pgf@ya{\pgfkeysvalueof{/pgf/inner ysep}}%
+    \advance\pgf@x.5\pgflinewidth
+    \advance\pgf@x\pgf@xa
+    \advance\pgf@y.5\pgflinewidth
+    \advance\pgf@y\pgf@ya
+    \pgf@yb\dp\pgfnodeparttextbox
+    \pgf@yc\dp\pgfnodeparttwobox
+    \ifdim\pgf@yb>\pgf@yc
+      \pgf@yc\pgf@yb
+    \fi
+    \advance\pgf@y\pgf@yc
+  }%
+  \savedanchor\threeanchor{%
+    \pgfmathsetlength\pgf@ya{\pgfkeysvalueof{/pgf/inner ysep}}%
+    \pgf@x\wd\pgfnodeparttextbox
+    \pgf@yb\dp\pgfnodeparttextbox
+    \pgf@yc\dp\pgfnodeparttwobox
+    \ifdim\pgf@yb>\pgf@yc
+      \pgf@yc\pgf@yb
+    \fi
+    \advance\pgf@y-\pgf@yc
+    \advance\pgf@y-2\pgf@ya
+    \advance\pgf@y-\pgflinewidth
+    \pgf@yb\ht\pgfnodepartthreebox
+    \pgf@yc\ht\pgfnodepartfourbox
+    \ifdim\pgf@yb>\pgf@yc
+      \pgf@yc\pgf@yb
+    \fi
+    \advance\pgf@y-\pgf@yc
+    \advance\pgf@x-\wd\pgfnodepartthreebox
+  }%
+  \savedanchor\fouranchor{%
+    \pgfmathsetlength\pgf@xa{\pgfkeysvalueof{/pgf/inner xsep}}%
+    \advance\pgf@x\wd\pgfnodepartthreebox
+    \advance\pgf@x2\pgf@xa
+    \advance\pgf@x\pgflinewidth
+  }%
+  \saveddimen\radius{%
+    % height:
+    \pgf@y\ht\pgfnodeparttextbox
+    \pgf@yb\ht\pgfnodeparttwobox
+    \ifdim\pgf@yb>\pgf@y
+      \pgf@y\pgf@yb
+    \fi
+    \pgf@yc\dp\pgfnodeparttextbox
+    \pgf@yb\dp\pgfnodeparttwobox
+    \ifdim\pgf@yc>\pgf@yb
+      \advance\pgf@y\pgf@yc
+    \else
+      \advance\pgf@y\pgf@yb
+    \fi
+    \pgf@yb\ht\pgfnodepartthreebox
+    \ifdim\pgf@yb<\ht\pgfnodepartfourbox
+      \pgf@yb\ht\pgfnodepartfourbox
+    \fi
+    \pgf@yc\dp\pgfnodepartthreebox
+    \ifdim\pgf@yc<\dp\pgfnodepartfourbox
+      \advance\pgf@yb\dp\pgfnodepartfourbox
+    \else
+      \advance\pgf@yb\pgf@yc
+    \fi
+    \ifdim\pgf@yc>\pgf@y
+      \pgf@y\pgf@yc
+    \fi
+    \pgfmathsetlength\pgf@ya{\pgfkeysvalueof{/pgf/inner ysep}}%
+    \advance\pgf@y2\pgf@ya
+    %
+    \pgf@x\wd\pgfnodeparttextbox
+    \pgf@xa\wd\pgfnodepartthreebox
+    \pgf@xb\wd\pgfnodeparttwobox
+    \pgf@xc\wd\pgfnodepartfourbox
+    \ifdim\pgf@xa>\pgf@x
+      \pgf@x\pgf@xa
+    \fi
+    \ifdim\pgf@xb>\pgf@x
+      \pgf@x\pgf@xb
+    \fi
+    \ifdim\pgf@xc>\pgf@x
+      \pgf@x\pgf@xc
+    \fi
+    \pgfmathsetlength\pgf@xa{\pgfkeysvalueof{/pgf/inner xsep}}%
+    \advance\pgf@x2\pgf@xa
+    \ifdim\pgf@y>\pgf@x
+      \pgf@x\pgf@y
+    \fi
+    \advance\pgf@x.5\pgflinewidth
+    %
+    \pgfmathsetlength{\pgf@xb}{\pgfkeysvalueof{/pgf/minimum width}}%
+    \pgfmathsetlength{\pgf@yb}{\pgfkeysvalueof{/pgf/minimum height}}%
+    \ifdim\pgf@x<.5\pgf@xb
+        \pgf@x=.5\pgf@xb
+    \fi
+    \ifdim\pgf@x<.5\pgf@yb
+        \pgf@x=.5\pgf@yb
+    \fi
+    %
+    \pgfmathsetlength{\pgf@xb}{\pgfkeysvalueof{/pgf/outer xsep}}%
+    \pgfmathsetlength{\pgf@yb}{\pgfkeysvalueof{/pgf/outer ysep}}%
+    \ifdim\pgf@xb<\pgf@yb
+      \advance\pgf@x\pgf@yb
+    \else
+      \advance\pgf@x\pgf@xb
+    \fi
+  }%
+  \inheritanchorborder[from=circle]%
+  \inheritanchor[from=circle]{north}%
+  \inheritanchor[from=circle]{north west}%
+  \inheritanchor[from=circle]{north east}%
+  \inheritanchor[from=circle]{center}%
+  \inheritanchor[from=circle]{west}%
+  \inheritanchor[from=circle]{east}%
+  \inheritanchor[from=circle]{mid}%
+  \inheritanchor[from=circle]{mid west}%
+  \inheritanchor[from=circle]{mid east}%
+  \inheritanchor[from=circle]{base}%
+  \inheritanchor[from=circle]{base west}%
+  \inheritanchor[from=circle]{base east}%
+  \inheritanchor[from=circle]{south}%
+  \inheritanchor[from=circle]{south west}%
+  \inheritanchor[from=circle]{south east}%
+  \anchor{two}{\twoanchor}%
+  \anchor{three}{\threeanchor}%
+  \anchor{four}{\fouranchor}%
+  \inheritbackgroundpath[from=circle]
+  \beforebackgroundpath{%
+    \pgfutil@tempdima=\radius
+    \pgfmathsetlength{\pgf@xb}{\pgfkeysvalueof{/pgf/outer xsep}}%  
+    \pgfmathsetlength{\pgf@yb}{\pgfkeysvalueof{/pgf/outer ysep}}%  
+    \ifdim\pgf@xb<\pgf@yb
+      \advance\pgfutil@tempdima by-\pgf@yb
+    \else
+      \advance\pgfutil@tempdima by-\pgf@xb
+    \fi
+    \advance\pgfutil@tempdima by-.5\pgflinewidth%
+    \pgfsetshortenstart{0pt}%
+    \pgfsetshortenend{0pt}%
+    \pgfsetarrows{-}%  
+    \pgfpathmoveto{\pgfpointadd{\centerpoint}{\pgfqpoint{-\pgfutil@tempdima}{0pt}}}%
+    \pgfpathlineto{\pgfpointadd{\centerpoint}{\pgfqpoint{\pgfutil@tempdima}{0pt}}}%
+    \pgfpathmoveto{\pgfpointadd{\centerpoint}{\pgfqpoint{0pt}{-\pgfutil@tempdima}}}%
+    \pgfpathlineto{\pgfpointadd{\centerpoint}{\pgfqpoint{0pt}{\pgfutil@tempdima}}}%
+    \pgfusepathqstroke
+  }%
+  \behindbackgroundpath{%
+    \pgfutil@tempdima=\radius
+    \pgfmathsetlength{\pgf@xb}{\pgfkeysvalueof{/pgf/outer xsep}}%  
+    \pgfmathsetlength{\pgf@yb}{\pgfkeysvalueof{/pgf/outer ysep}}%  
+    \ifdim\pgf@xb<\pgf@yb
+      \advance\pgfutil@tempdima by-\pgf@yb
+    \else
+      \advance\pgfutil@tempdima by-\pgf@xb
+    \fi
+    \advance\pgfutil@tempdima by-.5\pgflinewidth%
+    \ifpgfcirclecrosssplitcustomfill%
+      \pgf@lib@sh@rs@process@list{\pgf@lib@sh@ccs@list@fill}{4}%
+      {%
+        \pgfmathloop
+           \ifnum\pgfmathcounter>4%
+           \else%
+             \pgf@lib@sh@getalpha\pgf@lib@sh@rs@number{\pgfmathcounter}%
+              \edef\pgf@tempa{\csname pgf@lib@sh@rs@\pgf@lib@sh@rs@number @item\endcsname}%
+              \ifx\pgf@tempa\pgf@lib@sh@rs@nonetext\else
+                \pgfsetfillcolor{\pgf@tempa}%
+                \pgf@lib@sh@ccs@angles{\pgfmathcounter}%
+                \pgfpathmoveto{\centerpoint}%
+                \pgfpathlineto{\pgfpointadd{\centerpoint}{\pgfqpointpolar{\pgf@lib@sh@ccs@angle}{\pgfutil@tempdima}}}%
+                \pgfpatharc{\pgf@lib@sh@ccs@angle}{\pgf@lib@sh@ccs@angle@}{\pgfutil@tempdima}%
+                \pgfpathclose
+                \pgfusepathqfill
+              \fi
+        \repeatpgfmathloop
+      }%
+    \fi%
+  }%
+}
+\def\pgf@lib@sh@ccs@angles#1{%
+  \ifcase#1\or\def\pgf@lib@sh@ccs@angle{90}%
+           \or\def\pgf@lib@sh@ccs@angle{0}%
+           \or\def\pgf@lib@sh@ccs@angle{180}%
+           \else\def\pgf@lib@sh@ccs@angle{270}%
+  \fi
+  \edef\pgf@lib@sh@ccs@angle@{\number\numexpr\pgf@lib@sh@ccs@angle+90\relax}%
+}
+\makeatother
+
+\newcommand{\simon}[1]{\todo[color=green]{SR: #1}}
+\newcommand{\nitya}[1]{\todo[color=blue!30]{NM: #1}}
+\newcommand{\penghui}[1]{\todo[color=red!60]{HPH: #1}}
+\newcommand{\michael}[1]{\todo[color=yellow]{MW: #1}}
+\newcommand{\winnie}[1]{\todo[color=purple!60]{WL: #1}}
+\newcommand{\peter}[1]{\todo[color=pink]{PR: #1}}
+\newcommand{\jae}[1]{\todo[color=brown!60]{JL: #1}}
+\newcommand{\silas}[1]{\todo[color=orange]{SJ: #1}}
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{heur}[thm]{Heuristic}
+\newtheorem{qn}[thm]{Question}
+\newtheorem{claim}[thm]{Claim}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{cond}[thm]{Conditions}
+\newtheorem*{notn}{Notation}
+
+\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem*{ex}{Example}
+\newtheorem*{nonex}{Nonexample}
+\newtheorem*{exer}{Exercise}
+
+\numberwithin{equation}{section}
+\numberwithin{thm}{section}
+
+\begin{document}
+
+\title{Quaternions: Algebra and Applications in Aerospace}
+\author{Hariharan Senthilkumar}
+\date{July 15, 2024}
+\maketitle
+
+\begin{abstract}
+    This paper will examine the properties of quaternions (especially the quaternion rotation operator) and why they offer certain advantages compared to Euler angles when it comes to 3D modeling. We will begin by outlining the basic algebraic properties and theorems of quaternions before focusing specifically on quaternion rotation. From there, we will compare quaternion rotation to rotation done by Euler angles, primarily the aerospace and orbit ephemeris sequences.
+\end{abstract}
+\section{What is a Quaternion?}
+
+This is an expository paper that draws from all the sources in the bibliography, especially Jack B. Kuiper's “Quaternions and rotation sequences: a primer with applications to orbits, aerospace, and virtual reality,” with original commentary, analysis, and examples woven in. Because of this, most definitions, derivations, figures, and notation follow Kuipers closely.
+
+In the simplest sense, a quaternion is simply a 4-dimensional vector. This means that, much like how a vector can be represented in $\mathbb{R}^2$ with two coordinates, a quaternion can be represented in $\mathbb{R}^4$ with four coordinates. For example, we can define a quaternion with the coordinates $(1,2,3,4)$. We can also write this as $1+2i+3j+4k$ where $i,j,k$ are unit vectors of a quaternion. The form of quaternions that we will use most in this paper is $q=q_0+\mathbf{q}$ where $q_0$ is the scalar/constant part and $\mathbf{q}$ is the vector part; in our example, $1+2i+3j+4k$, $q_0=1$ and $\mathbf{q}=2i+3j+4k$. There are other ways to write quaternions, but we will examine them later. A unit vector is a vector that has a length (also known as norm) of one. Unit vectors are also called normalized vectors.
+
+\subsection{Addition and Subtraction}
+First, let us define a quaternion rigorously. A quaternion is a four-dimensional vector that is written algebraically in the following way:
+$$a+bi+cj+dk$$
+This expression represents a quaternion if $a,b,c,d\in\mathbb{R}$ and $i,j,k$ satisfy these properties:
+$$i^2=j^2=k^2=ijk=-1,$$
+$$ij=k=-ji,$$
+$$jk=i=-kj,$$
+$$ki=k=-ik.$$
+\begin{defn}
+    Quaternion addition and subtraction are componentwise. This means that given two quaternions, their sum and difference can be found by adding or subtracting the coefficients of the quaternions.
+\end{defn}
+\begin{ex}
+    Define the first quaternion as $q_1=a+bi+cj+dk$ and the second as $q_2=w+xi+yj+zk$. Their sum is $q_1+q_2=a+w+i(b+x)+j(c+y)+k(d+z)$. Their difference is $q_1-q_2=a-w+i(b-x)+j(c-y)+k(d-z)$
+\end{ex}
+
+\subsection{Multiplication and Division}
+\begin{defn}
+    Multiplication between quaternions works in two main ways. The first way is by following the distributive property for all the terms and applying the following rules:
+    $$i^2=j^2=k^2=ijk=-1,$$
+    $$ij=k=-ji,$$
+    $$jk=i=-kj,$$
+    $$ki=k=-ik.$$
+    The second way is by a special formula that we derive here:
+    Say that we have two vectors $a=(a_0,a_1,a_2)$ an d $b=(b_0,b_1,b_2)$. Their scalar product is given by $a\cdot b=a_0b_0+a_1b_1+a_2b_2$ and their cross product is given by:
+    $$a\times b=\begin{vmatrix}
+i & j & k\\
+a_0 & a_1 & a_2\\
+b_0 & b_1 & b_2
+\end{vmatrix}
+=i(a_1b_2-a_2b_1)+j(a_2b_0-a_0b_2)+k(a_0b_1-a_1b_0).$$
+Given this, we can write the product between two quaternions $p$ and $q$ as:
+$$pq=p_0q_0-\mathbf{p}\cdot\mathbf{q}+p_0\mathbf{q}+q_0\mathbf{p}+\mathbf{p}\times\mathbf{q}.$$
+\end{defn}
+\begin{ex}
+ This is an example of finding the product using the distributive property. There are several examples of products calculated via the second method through out this paper which is why we will not see it here. Define the first quaternion as $q_1=a+bi+cj+dk$ and the second as $q_2=e+fi+gj+hk$. Their product, using the first method, is:
+$$(a+bi+cj+dk)(e+fi+gj+hk),$$
+$$=ae+afi+agj+ahk+bei+bfi^2+bgji+bhki+cje+cfij+cgj^2+chjk+dek+dfik+dgkj+dhk^2,$$
+$$=ae+afi+agj+ahk+bei-bf+bgk-bhj+cej-cfk-cg+chi+dek+dfj-dgi-dh.$$
+
+    We can also write this in coordinate form by arranging it the following way:
+    $$ae-bf-cg-dh+i(af+be+ch-dg)+j(ag-bh+ce+df)+k(ah+bg-cf+de)$$
+    Since we know the constant term and the coefficients of $i,j$, and $k$, we can write the coordinates as:
+    $$(ae-bf-cg-dh, af+be+ch-dg, ag-bh+ce+df, ah+bg-cf+de).$$
+\end{ex}
+\begin{defn}
+    Quaternion division is also relatively straightforward. If you wanted to divide two quaternions, called $q_1$ and $q_2$, you would multiply $q_1$ by the multiplicative inverse of $q_2$.
+\end{defn}
+
+\begin{rem}
+   This definition might be difficult to visualize or interpret given that we have only represented quaternions either as an algebraic expression or as a set of coordinates. This particular definition of division makes more sense when we write a quaternion as a matrix since the multiplicative inverse of a matrix is simple to find.
+
+To figure out what the matrix form of a quaternion is, let us look back on what the product of two quaternions is:
+$$(ae-bf-cg-dh, af+be+ch-dg, ag-bh+ce+df, ah+bg-cf+de)$$
+We can rewrite this as the following to make it easier to convert to a matrix:
+$$(ae-bf-cg-dh, be+af-dg+ch, ce+df+ag-bh, de-cf+bg+ah)$$
+
+Since all the $e,f,g,h$'s are in the same order, we can write this as a matrix times a vector:
+
+$$\begin{bmatrix}
+a & -b & -c & -d\\
+b & a & -d & c  \\
+c & d & a & -b \\
+d & -c & b & a
+\end{bmatrix}
+\begin{bmatrix}
+e\\
+f  \\
+g \\
+h \\
+\end{bmatrix}.
+$$
+
+The four-by-four matrix on the left is how we can represent any quaternion as a matrix. This means that given any quaternion $q$, we can rewrite it as a matrix using the coefficients; this makes it far easier to divide.
+\end{rem}
+
+\begin{ex}
+    Say we have the quaternion $5+12i-6j+9k$. Knowing that $a=5, b=12, c=-6, d=9$, we can write this in matrix form to be:
+$$\begin{bmatrix}
+5 & -12 & 6 & -9\\
+12 & 5 & -9 & -6 \\
+-6 & 9 & 5 & -12 \\
+9 & 6 & 12 & 5
+\end{bmatrix}.
+$$
+We can now also perform division with ease with matrices since finding the multiplicative inverse of a matrix just involves solving a system of equations.
+\end{ex}
+
+\subsection{Complex Conjugate, Norms, and Inverses}
+\begin{defn}
+    Much like how two-dimensional complex numbers have complex conjugates, quaternions do as well. For some quaternion $a+bi+cj+dk$, its complex conjugate is $a-bi-cj-dk$. For any quaternion $q$, we write its complex conjugate as $q^{*}$
+    \end{defn}
+
+A couple of properties we can derive from this definition are that the complex conjugate of the product of two quaternions is equal to the product of the complex conjugates of the individual quaternions, in reverse order; we can also say that the sum of a quaternion and its complex conjugate is a scalar quantity. These two properties can be written algebraically as:
+
+Given two quaternions $p$ and $q$, the first property can be written as $(pq)^{*}=q^{*}p^{*}$ and the second property can be written as $q+q^{*}=a+bi+cj+dk+a-bi-cj-dk=2a\rightarrow \text{scalar}$.
+
+\begin{defn}
+    A norm is simply the length of an object. The norm of a quaternion $q$ can be represented as $N(q)$ or $|q|$ and is found by calculating $\sqrt{q^{*}q}$. So $N(q)=\sqrt{q^{*}q}$ and $N^2(q)=q^{*}q$.
+\end{defn}
+A property we can derive from this is $N^2(pq)=N^2(p)N^2(q)$ where $p$ and $q$ are quaternions.
+
+\begin{defn}
+    While we did define the multiplicative inverse before, there is another easier way of finding the multiplicative inverse of a quaternion than the way mentioned before. The inverse of a quaternion $q$ can be written as $q^{-1}$ such that $qq^{-1}=1$. Using both pre- and post-multiplication by the complex conjugate $q^{*}$, we can state that:
+    $$q^{-1}qq^{*}=q^{*}qq^{-1}=q^{*}$$
+    We can further rewrite this since $q^{*}q=N^2(q)$, so:
+    $$q^{-1}=\frac{q^{*}}{N^2(q)}=\frac{q^{*}}{|q|^2}$$
+    This equation can be used to find the inverse of any quaternion. Also, note that if $q$ was a unit quaternion, which is to say that its norm is $1$, then the inverse is the complex conjugate. Algebraically, that is $q^{-1}=q^{*}$.
+\end{defn}
+\section{Quaternion Rotation}
+Out of all the properties and theorems surrounding the quaternion, the rotation of quaternions is likely the single most useful and applicable aspect of these objects. We will explore the applications of a quaternion later on, but for now, we shall establish some theorems relating to rotations that are useful to understanding their nature in quaternions.
+\subsection{Rotation Operator}
+The reason why quaternions are hailed as so applicable in fields outside of mathematics is because of how good it is at modeling 3-dimensional rotations, but the fact is that a quaternion is a four-dimensional object, so why would we use it to model 3-dimensional movement and how would we do it? The first question will be answered a bit later, so we shall examine the second question---how would we do it?
+To use a quaternion in a 3-dimensional space, the solution is very simple---set the real term equal to $0$. Written differently, a vector in $\mathbb{R}^3$ can be treated as a quaternion in $\mathbb{R}^4$ with a real term equal to $0$. Such a quaternion is known as a pure quaternion. here is a more formal definition.
+\begin{defn}
+    Say that $Q_0$ is the set of all pure quaternions and it is a subset of $Q$, the set of all quaternions. We call any ``impure quaternions", that is non-pure quaternions, general quaternions. Here, we can establish a correspondence between any vector $v\in\mathbb{R}^3$ and the pure quaternion $q=0+v\in Q_0$. We write this correspondence as $v\in\mathbb{R}^3\leftrightarrow q=0+v\in Q_0\subset Q$.
+\end{defn}
+
+Our goal here is to try to find the rotation operator defined by a quaternion by which we can rotate other objects in three-dimensional space. It is reasonable to believe that a quaternionic rotation operator may follow a similar structure to a matrix rotation operator; if work off on this belief, then we can say that there must be some quaternion $q\in Q$ that represents rotation such that for some vector $v\in\mathbb{R}^3$ and image $w\in\mathbb{R}^3$ we have $w=qv$. We are testing to see if this product $qv$ will give us a vector as a result. Note again that a pure quaternion and a vector in $\mathbb{R}^3$ are the same.
+
+We shall verify if this equation will work as a rotation operator.
+$$qv=(q_0+\mathbf{q})(0+v)$$
+$$=q_0\cdot 0-\mathbf{q}\cdot v+0\cdot\mathbf{q}+q_0\cdot v+\mathbf{q}\times v$$
+$$=-\mathbf{q}\cdot v+q_0v+\mathbf{q}\times v.$$
+This result shows that $qv$ does not necessarily equal to a vector in $\mathbb{R}^3$ except in the case that $q\cdot v=0$ where $q$ and $v$ are orthogonal. This means that the quaternion rotation cannot consist of a single general quaternion.
+
+So we look onward and consider two quaternions. It is important to note that from now on we will represent all vectors in $\mathbb{R}^3$ in their pure quaternion form to avoid complication.
+
+Say that we have two general quaternions from the set $Q$ called $q$ and $r$ and we have one pure quaternion from the set $Q_0$ called $p$. There are six different combinations of products that we can derive from $p,q,r$: 
+
+$$pqr, prq, qrp, rqp, rpq, \text{and } qpr.$$
+
+Quaternions of set $Q$ are closed under multiplication while the set $Q_0$ is not closed under multiplication. This means the products $qr$ and $rq$ are also quaternions; this means that the four combinations that have $r$ and $q$ next other are actually made up of one general quaternion and one pure quaternion. We know that these four combinations cannot work because, as we have shown above, a rotation operator cannot consist of only one general quaternion and one pure quaternion. This means that the only two combinations that can work are $qpr$ and $rpq$ as these are the only ones that do not contain $qr$ or $rq$.
+
+Note that while $p$ is distinct from $q$ and $r$ because it is a pure quaternion (also known as a vector in $\mathbb{R}^3$), $q$ and $r$ are both general quaternions that have no distinction, so really there is only one combination that can work: $qpr$. Let us now see if this is satisfactory to make a quaternion operator.
+
+Let $q=q_0+\mathbf{q},p=0+\mathbf{p},$ and $r=r_0+\mathbf{r}$. The real part of the product $qpr$ is: 
+$$-r_0(\mathbf{q}\cdot\mathbf{p})-q_0(\mathbf{p}\cdot\mathbf{r})+(\mathbf{q}\times \mathbf{r})\cdot\mathbf{p}.$$
+
+Recall that we want the result to be a vector (which is the same as a pure quaternion), so we need the real part to be $0$. We can do this by setting $r_0=q_0$. Doing so results in:
+$$-q_0(\mathbf{q}+\mathbf{r})\mathbf{p}+(\mathbf{q\times r})\cdot \mathbf{p}.$$
+This can become $0$ if $r=-q$. Note that if we set $r=-q$, we also get the following:
+$$r=r_0+\mathbf{r}=q_0-q=q^{*} \rightarrow q=r^{*}.$$
+Recall from before that even though there were two valid combinations, $qpr$, and $rpq$, we only considered the former because both of the combinations were essentially the same since there was no distinction between $q$ and $r$. While they are the same, we will still write them as two different but equivalent operators:
+$$qpq^{*}\text{and }q^{*}pq.$$
+These triple products always produce a pure quaternion when $p$ is a pure quaternion. So when we have an input vector $v$, we have two possible triple-product quaternion operators defined as:
+$$w_1=qvq^{*},$$
+$$w_2=q^{*}vq.$$
+
+We can write the above operators generally as a map $W_q:Q_0\to Q_0$ where the function is defined as $W_q(v)=qvq^{*}$ where $q$ is the quaternion that is rotating and $v$ is the vector being acted upon. There are two operators we derived above, but they both can be found using $W_q(v)$ since the first operator is $W_q(v)$ and the second is $W_{q^{*}}(v)$.
+
+The operator $W_q(v)$ above will be used several times from here on out because while we think these are two \textit{possible} operators, we have yet to prove definitively they define quaternion rotations. That is what the next section will be examining: an alternate, geometric viewpoint on how we can begin to approach the proof of why these two operators are rotation operators.
+
+\subsection{Angles and Geometric View}
+Here, we will examine whether we can associate an angle with a quaternion. If we can, then we can associate an angle with the operator we discovered above. Note that from here on out in this section, the quaternion $q$ that is used to define operators will always be a unit quaternion.
+Recall that given a unit quaternion $q=q_0+\mathbf{q}$, we can say that $q_0^2+|\mathbf{q}^2|=1$. Here, we can make a connection to the identity $\cos^2{\theta}+\sin^2{\theta}=1$. So if we match the $\cos^2{\theta}$ with $q_0^2$ and the $\sin^2{\theta}$ with $|\mathbf{q}^2|$. Setting these terms equal to each other, we get:
+$$\cos^2{\theta}=q_0^.2$$
+$$\sin^2{\theta}=|\mathbf{q}^2|.$$
+We note that there is a restriction of $-\pi<\theta\leq\pi$ so that $\theta$ can be defined uniquely. We can also write the unit vector $u$ that represents the axis $q$ rotates about through the following equation:
+$$\frac{\mathbf{q}}{|\mathbf{q}|}=\frac{\mathbf{q}}{\sin{\theta}}.$$
+Using that above equation, we can rewrite the equation of $q$ as:
+$$q=q_0+\mathbf{q}=\cos(\theta)+u\sin(\theta).$$
+This is an important result because given any unit quaternion $q=q_0+\mathbf{q}$, we can rewrite it into the above form. To see the connection between quaternions and rotations more clearly, we can examine what would happen if we multiplied two unit quaternions, $p$ and $q$, that have the same vector $u$, together. Let $\alpha$ be the angle associated with $p$ and $\beta$ be the angle associated with $q$. Using the previous result, we write
+$$p=\cos\alpha+u\sin\alpha.$$
+$$q=\cos\beta+u\sin\beta.$$
+The product of these two quaternions, $pq$, can be found using the second quaternion product method that was discussed in the multiplication and division section above:
+$$(\cos\alpha+u\sin\alpha)(\cos\beta+u\sin\beta)$$
+$$=\cos\alpha\cdot\cos\beta-(u\sin\alpha)(u\sin\beta)+\cos\alpha(u\sin\beta)+\cos\beta(u\sin\alpha)+u\sin\alpha\times u\sin\beta$$
+$$=\cos\alpha\cdot\cos\beta-\sin\alpha\cdot\sin\beta+u(\sin\alpha\cdot\cos\beta+\cos\alpha\cdot\sin\beta)$$
+$$=\cos(\alpha+\beta)+u\sin(\alpha+\beta).$$
+Say that $\alpha+\beta=\gamma$. This means the above result can be rewritten as:
+$$\cos(\gamma)+u\sin(\gamma).$$
+This expression is also a quaternion as it follows the general form of a quaternion defined by an angle. This means multiplying two quaternions with the same vector $u$ results in a quaternion with the vector $u$. Furthermore, the resulting quaternion will have an angle that is the sum of the angles of the two quaternions that were multiplied. In this example, the quaternions $p$ and $q$ have the angles $\alpha$ and $\beta$ respectively and they both have vector $u$. This means that their product will have the vector $u$ and an angle of $\alpha+\beta$.
+
+To see the rotations in a more general form, let us do a small test with a quaternion $q$ in the operator that has a vector $u=0i+0j+1k=k\in\mathbb{R}^3$. This vector is also known as a basis vector; in $\mathbb{R}^3$ the vectors $i,j,k$ are all basis vectors. We also choose an extremely small value for the angle $\theta$. The formula for a quaternion $q$ with a vector $k$ and an angle $\theta$ is $q=\cos\theta+k\sin\theta$.
+
+But here, we can use our knowledge of the fact that $\theta$ is very small, meaning that $\cos\theta\approx 1$ and $\sin\theta\approx\theta$. This means we can rewrite $q$ as $q=1+k\cdot \theta$.
+
+Using this quaternion, we can apply the first operator on the basis vector $i$. Given this, the operator is:
+$$W_q(i)=qiq^{*},$$
+$$W_q(i)=(1+k\theta)(0+i)(1-k\theta),$$
+$$W_q(i)=0+i+2\theta j,$$
+$$W_q(i)=i+2\theta j.$$
+We got this result because $\theta^2$ is effectively negligible since $\theta$ is very small. If we say that the angle between the input and output vector is $\alpha$, then we can say that $\tan\alpha=2\theta$. Since for a small $\alpha$ we can say that $\tan\alpha\approx\alpha$. This shows that vector $i$ was rotated counter-clockwise by $2\theta$ around the axis of $k$.
+
+We will now take a look at an example of rotation given the methods we have outlined above.
+
+\subsection{Example of Quaternion Rotation With Angle $\frac{\pi}{6}$}
+This section is based on an example from Jack B. Kuipler's book $[3]$.$$q=\cos\theta+k\sin\theta=\cos\frac{\pi}{6}+k\sin\frac{\pi}{6}=\frac{\sqrt{3}}{2}+\frac{1}{2}k.$$
+We apply this quaternion to a different basis vector $i$, which can also be written as $v=1i+0j+0k$. Using the first quaternion operator on $q$ and $i$, we get:
+$$W_q(v)=qvq^{*},$$
+$$W_q(v)=(\frac{\sqrt{3}}{2}+\frac{1}{2}k)(0+i)(\frac{\sqrt{3}}{2}-\frac{1}{2}k),$$
+$$W_q(v)=\frac{1}{2}i+\frac{\sqrt{3}}{2}j.$$
+We note three things: $W_q$ is a pure quaternion as expected since when we have a pure quaternion input then we would expect a pure quaternion output. The second thing we should note is that the norm of $w$ is $1$. The third thing is that the angle associated with the quaternion $q$ is $\frac{\pi}{3}$ since $\cos\frac{\pi}{3}=\frac{1}{2}$ and $\sin\frac{\pi}{3}=\frac{\sqrt{3}}{2}$.
+
+This result is exactly what we saw before in the previous section because the vector $i$ was rotated by an angle of $2\theta=2\frac{\pi}{6}=\frac{\pi}{3}$ around an axis $k$ much like the general example before.
+
+Now we should consider what this means geometrically. When viewing this particular example, it is best to consider multiple perspectives; in this case, there are two viewpoints:
+
+\textbf{Perspective 1}: A person is seated with respect to the coordinate frame ${i,j,k}$. When we apply the operator $qvq^{*}$, it appears to this person that the vector $v$ is being rotated about $k$ as an axis with an angle of positive $\frac{\pi}{3}$, meaning that $v$ is being rotated counterclockwise. Here, the coordinate frame is fixed while the vector is rotated. This is also known as point rotation.
+
+\textbf{Perspective 2}: In this perspective, a person is seated with respect to the vector $v$. When we apply the operator $qvq^{*}$, this person will see the coordinate frame ${i,j,k}$ move clockwise at an angle of $-\frac{\pi}{3}$ around the axis $k$. Here, the vector is fixed and the coordinate frame is rotated. This is also known as frame rotation.
+This shows more clearly how exactly rotations work in the context of a quaternion.
+\subsection{Proof that $W_q$ is a Rotation}
+This proof is based on Kuipler's book $[3]$.
+
+So, as of now, we have enough evidence to believe that $W_q$ represents a quaternion rotation, but we have not yet proved that rigorously. So that is what we shall do now. However, for that proof to work, we need to prove that $W_q(v)$ is a linear operator; the reason why this is necessary will become clear later. After that, we will also prove another theorem that will be used later.
+\begin{thm}
+  What it means for $W_q$ to be a linear operator is that given any two vectors $x$ and $y$ in $\mathbb{R}^3$ and a scalar quantity $k$, we can say that:
+    $$W_q(kx+y)=kW_q(x)+W_q(y).$$
+    To prove that this is true, let us start by using the distributive property on the quaternion product:
+    $$W_q(kx+y)=q(kx+y)q^{*},$$
+    $$W_q(kx+y)=(kqx+qb)q^{*},$$
+    $$W_q(kx+y)=kqxq^{*}+qyq^{*},$$
+    $$W_q(kx+y)=kW_q(x)+W_q(y).$$
+    \qed
+\end{thm}
+\begin{thm}
+This theorem will prove that when $W_q$ is applied to a vector $v=k\mathbf{q}$, such that $v$ is in the same direction as the vector component of $q$, the vector remains unchanged.
+   $$W_q(v)=qvq^{*},$$
+   $$W_q(v)=q(k\mathbf{q})q^{*},$$
+   $$W_q(v)=(2q_0^2-1)(k\mathbf{q})+2(\mathbf{q}\cdot k\mathbf{q})\mathbf{q}+2q_0(\mathbf{q}\times k\mathbf{q}),$$
+   $$W_q(v)=kq_0^2\mathbf{q}-k|\mathbf{q}|^2\mathbf{q}+2k|\mathbf{q}|^2\mathbf{q},$$
+   $$W_q(v)=k(q_0^2+|\mathbf{q}|^2)\mathbf{q},$$
+   $$W_q(v)=k\mathbf{q}.$$
+   \qed
+\end{thm}
+
+Our plan is as follows: Say that we have a quaternion $q$ with its vector part being $\mathbf{q}$ and its associated angle being $\theta$. We also have a vector $v\in\mathbb{R}^3$ that we can write in two orthogonal components: one component called $a$ along $\mathbf{q}$ and a component $n$ normal to $\mathbf{q}$. We will show that when we apply the operator $W_q(v)=qvq^{*}$, the first component $a$ will be invariant, and the second component $n$ will be rotated above $\mathbf{q}$ by an angle of $2\theta$. Since we have proved previously that $W_q$ is a linear operator and since $v$ is the sum of the two aforementioned components, this would mean that $W_q(v)$ would be a rotation of $2\theta$ in $\mathbb{R}^3$ about $\mathbb{q}$ as its axis.
+
+To start, we should define the following:
+$$q=q_0+\mathbf{q}=\cos\theta+u\sin\theta.$$
+$$u=\frac{\mathbf{q}}{|\mathbf{q}|}.$$
+In this case, $u$ is the unit vector.
+
+We will write $v$ as $v=a+n$. The vector $a$ is a scalar multiple of $\mathbb{q}$ because the vector $a$ lies along the vector $\mathbf{q}$, which means that $a=k\mathbf{q}$ for some scalar quantity $k$. If we use theorem $2.3$, we can say that:
+$$W_q(a)=W_q(k\mathbf{q})=k\mathbf{q}=a.$$
+We now have to prove that $W_q$ rotates the component $n$ by through an angle of $2\theta$ about $\mathbf{q}$ as an axis. To do this, we compute the following using the fact that $u=\frac{\mathbf{q}}{|\mathbf{q}|}$:
+$$W_q(n)=(q_0^2-|\mathbf{q}|^2)n+2(\mathbf{q}\cdot n)\mathbf{q}+2q_0(\mathbf{q}\times n),$$
+$$W_q(n)=(q_0^2-|\mathbf{q}^2|)n+2q_0(\mathbf{q}\times n),$$
+$$W_q(n)=(q_0^2-|\mathbf{q}^2|)n+2q_0|\mathbf{q}|(u\times n).$$
+If we write that $u\times n=n_{\perp}$, we can rewrite the last equation above as $W_q(n)=(q_0^2-|\mathbf{q}|^2)n+2q_0|\mathbf{q}|n_{\perp}$.
+Our goal now is to prove that $n$ and $n_{\perp}$ have the same length. Since the angle between the two vectors is $\frac{\pi}{2}$ and they are orthogonal and $\sin(\frac{\pi}{2})=1$ we can say that:
+$$|n_{\perp}|=|n\times u|=|n||u|\sin(\frac{\pi}{2})=|n|.$$
+Using the trigonometric form of a quaternion, we can rewrite $W_q(n)$ as:
+$$(\cos^2\theta-\sin^2\theta)n+(2\cos\theta\sin\theta)n_{\perp},$$
+$$=\cos(2\theta)n+\sin(2\theta)n_{\perp}.$$
+So, we have shown that $W_q(v)=W_q(a+n)=W_q(a)+W_q(n)=a+m$ such that $m=W_q(n)=\cos(2\theta)n+\sin(2\theta)n_{\perp}$. From all this, we can write the following theorem:
+\begin{thm}
+    For any unit quaternion $q=q_0+\mathbf{q}=\cos\theta+u\sin\theta$ and for any given vector $v\in\mathbb{R}^3$, the operator $W_q=qvq^{*}$ on vector $v$ is a rotation of the vector $v$ through an angle of $2\theta$ about $\mathbf{q}$ as the axis of rotation. $\qed$
+\end{thm}
+This proof is incredibly important because this theorem is one of the principal reasons why quaternions are so applicable to other fields. In fact, we will now explore the applications of quaternions to other fields of science and math,
+\section{Quaternion Applications}
+\subsection{The Aerospace Sequence}
+Before we delve into how quaternions come into play here, we should discuss Euler angles first. Euler angles are the angle of rotation about a coordinate axis. A sequence of these rotations is called an Euler angle sequence or an Euler angle-axis sequence. There is a restriction that states that successive axes of rotations have to be distinct; given this restriction, there are 12 Euler angle-axis sequences. These twelve axis-sequences are:
+$$xyz\hspace{1.5 cm} yzx\hspace{1.5 cm} zxy$$
+$$xzy\hspace{1.5 cm} yxz\hspace{1.5 cm} zyx$$
+$$xyx\hspace{1.5 cm} yzy\hspace{1.5 cm} zxz$$
+$$xzx\hspace{1.5 cm} yxy\hspace{1.5 cm} zyz$$
+These sequences are read as follows: given some sequence, for example $xyz$, it is read as a rotation about the x-axis, then a rotation about the y-axis, followed by a rotation about the z-axis. Now that we know what Euler angles are, we can define the aerospace sequence using them and then define it using quaternions.
+
+The Euler angle-axis sequence $zyx$ is a sequence used often in aerospace. This can be seen in the Heading and Attitude Indicator which exists in almost every airplane cockpit; this indicator associates the orientation of the aircraft frame to a reference frame, typically Earth's local tangent and the northwards direction. The positive x-axis of the aircraft is directed along the longitude and the positive y-axis is directed along the right wing, and the positive z-axis is normal to the x and y axes and it points downwards.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{Screen Shot 2024-07-10 at 5.17.21 PM.png}
+    \caption{Aircraft Euler Angle Sequence}
+    \label{fig:enter-label}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{Screen Shot 2024-07-10 at 5.20.26 PM.png}
+    \caption{Geometric Representation of Aircraft Euler Angle Sequence}
+    \label{fig:enter-label}
+\end{figure}
+In aerospace, the reference coordinate frame is defined, as we have mentioned above, as the Earth's local tangent plane and the Northward direction. This means that the positive X-axis points north, the positive Y-axis points east, and the positive Z-axis points downwards. Note that there is a difference between the x-axis and the X-axis, the y-axis and the Y-axis, and the z-axis and the Z-axis, as shown in Figure 2. The reference coordinate frame has a rotation first through an angle $\psi$ about the Z-axis; this rotation defines the aircraft's heading. Then, there is a rotation about the y-axis through an angle $\theta$ that defines the aircraft's elevation. There is also the rotation about the x-axis through an angle of $\phi$ that defines the aircraft's bank angle. All put together, these three rotations connect the aircraft's body coordinate frame to the local reference coordinate frame of Earth.
+The aerospace rotation sequence shown in Figure 1 can be represented mathematically as the following matrix product:
+$$R=(R^x)_{\phi}(R^y)_{\theta}(R^z)_{\psi},$$
+$$R=(R^x)_{\phi}\begin{bmatrix}
+\cos\theta & 0 & -\sin\theta\\
+0 & 1 & 0\\
+\sin\theta & 0 &\cos\theta
+\end{bmatrix}
+\begin{bmatrix}
+\cos\psi & \sin\psi & 0\\
+-\sin\psi & \cos\psi & 0\\
+0 & 0 & 1
+\end{bmatrix},
+$$
+$$
+=\begin{bmatrix}
+1 & 0 & 0\\
+0 & \cos\theta & \sin\phi\\
+0 & -\sin\phi &\cos\phi
+\end{bmatrix}
+\begin{bmatrix}
+\cos\theta\cos\psi & \cos\theta\sin\psi & -\sin\theta\\
+-\sin\psi & \cos\psi & 0\\
+\sin\theta\cos\psi & \sin\theta\sin\psi &\cos\theta
+\end{bmatrix},
+$$
+$$
+=\begin{bmatrix}
+\cos\psi\cos\theta & \sin\psi\cos\theta & -\sin\theta\\
+(\cos\psi\sin\theta\sin\phi-\sin\psi\cos\phi) & (\sin\psi\sin\theta\sin\phi+\cos\psi\cos\theta) & \cos\theta\sin\phi\\
+(\cos\psi\sin\theta\cos\phi+\sin\psi\sin\phi) & (\sin\psi\sin\theta\cos\phi-\cos\psi\sin\phi) &\cos\theta\cos\phi
+\end{bmatrix}.
+$$
+This product of rotation matrices is also a rotation matrix that can represent the aerospace sequence; this matrix, geometrically, is a single rotation about a general axis. However, this was all derived using Euler angles, so where do quaternions come in?
+
+We take a look at Figure 2 again. To use the quaternion rotation operator, we state the following:
+$$\alpha=\frac{\psi}{2},$$
+$$\beta=\frac{\theta}{2},$$
+$$\gamma=\frac{\phi}{2}.$$
+The half-angle equations above make it easier to do the rest of this process. Writing in terms of $\alpha,\beta,\gamma$, the quaternions used to define the rotation operators are:
+$$q_{z,\psi}=\cos\alpha+k\sin\alpha,$$
+$$q_{y,\theta}=\cos\beta+j\sin\beta,$$
+$$q_{x,\phi}=\cos\gamma+i\sin\gamma.$$
+Since this is a sequence of frame rotations, the quaternion product representing a composite rotation is $q=q_{z,\psi}q_{y,\theta}q_{x,\phi}$. When we calculate this composite product, we get:
+$$q=q_{z,\psi}q_{y,\theta}q_{x,\phi}=q_0+iq_1+jq_2+kq_3.$$
+The above equation holds true when:
+$$q_0=\cos\alpha\cos\beta\cos\gamma+\sin\alpha\sin\beta\sin\gamma,$$
+$$q_1=\cos\alpha\cos\beta\sin\gamma-\sin\alpha\sin\beta\cos\gamma,$$
+$$q_2=\cos\alpha\sin\beta\cos\gamma+\sin\alpha\cos\beta\sin\gamma,$$
+$$q_3=\sin\alpha\cos\beta\cos\gamma-\cos\alpha\sin\beta\sin\gamma.$$
+We now have a quaternion product we can read as an expression for the composite rotation angle and the composite rotation axis. If the said rotation angle is $\mu$, for example, then we can state:
+$$\cos(\frac{\mu}{2})=\cos\alpha\cos\beta\cos\gamma+\sin\alpha\sin\beta\sin\gamma.$$
+The rotation axis can be defined as:
+$$v=(v_1,v_2,v_3)\text{ such that the following conditions are true:}$$ 
+$$v_1=q_1=\cos\alpha\cos\beta\sin\gamma-\sin\alpha\sin\beta\cos\gamma,$$
+$$v_2=q_2=\cos\alpha\sin\beta\cos\gamma+\sin\alpha\cos\beta\sin\gamma,$$
+$$v_3=q_3=\sin\alpha\cos\beta\cos\gamma-\cos\alpha\sin\beta\sin\gamma.$$
+
+This general rotation formula is equivalent to the aerospace sequence and is significantly easier to calculate and use.
+\subsection{Orbit and Orbit Ephemeris Sequence}
+Our goal here is to find out what the internally fixed reference frame and the orbit frame are so that we can find two Euler angle sequences to connect both of these frames. What we can say for certain now is that these two sequences have to be equal, so we can match corresponding terms with each other. Leonhard Euler often used the Euler angle sequences of $zxz$ and $zyz$ when talking about orbital mechanics, so that is what we will examine here as well.
+
+We will begin by considering the orbit of a near-Earth satellite and defining the satellite's inertially fixed frame. This frame has the X and Y axes located on the equatorial plane, meaning that it contains the Earth's equator. We also define the x-axis to be fixed in the direction of the constellation Aries. The Z-axis is normal to this plane such that the plane can be right-handed.
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Screenshot 2024-07-13 at 3.00.28 PM.png}
+    \caption{Orbital Euler Angle Sequence}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Screenshot 2024-07-13 at 10.50.46 AM.png}
+    \caption{Orbit Euler Angle Sequence Diagram}
+    \label{fig:enter-label}
+\end{figure}
+
+From Figure 4, we note the following: the plane $NOR$ is an orbital plane and it intersects the equatorial plane along the line $ON$. $ON$ is known as the line of nodes and point $N$ is an ascending node. The orientation of the orbital plane is defined by two Euler angle rotations from the reference frame. As seen in Figure 4, the rotation about the Z-axis is through an angle $\Omega$ such that the positive $x$-axis contains the ascending node $N$. The rotation about the x-axis is through the angle $\iota$ such that the y-axis lies along the orbital plane; this angle $\iota$ defines the inclination angle of this plane and the z-axis is normal to this plane. A rotation about the z-axis through an angle $\nu$ defines the orbit frame such that the x-axis points towards the orbiting object.
+
+This sequence of rotations is the Euler angle sequence for orbits. Now, as we have done or the aerospace sequence, we find the rotation matrix that allows the internally fixed frame into the orbit frame.
+$$S=S_{\nu}^zS_{\iota}^xS_{\Omega}^z,$$
+$$S=S_{\nu}^z\begin{bmatrix}
+1 & 0 & 0\\
+0 & \cos\iota & \sin\iota\\
+0 & -\sin\iota &\cos\iota
+\end{bmatrix}
+\begin{bmatrix}
+\cos\Omega & \sin\Omega & 0\\
+-\sin\Omega & \cos\Omega & 0\\
+0 & 0 & 1
+\end{bmatrix},$$
+
+
+$$S=\begin{bmatrix}
+\cos\nu & \sin\nu & 0\\
+-\sin\nu & \cos\nu & 0\\
+0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+\cos\Omega & \sin\Omega & 0\\
+-\sin\Omega\cos\iota & \cos\Omega\cos\iota & \sin\iota\\
+\sin\Omega\sin\iota & -\cos\Omega\sin\iota & \cos\iota
+\end{bmatrix},$$
+
+$$S=\begin{bmatrix}
+(\cos\Omega\cos\nu-\sin\Omega\cos\iota\sin\nu) & (\sin\Omega\cos\nu+\cos\Omega\cos\iota\sin\nu) & \sin\iota\sin\nu\\
+-(\cos\Omega\sin\nu-\sin\Omega\cos\iota\cos\nu) & (-\sin\Omega\sin\nu+\cos\Omega\cos\iota\cos\nu) & \sin\iota\cos\nu\\
+\sin\Omega\sin\iota & -\cos\Omega\sin\iota & \cos\iota
+\end{bmatrix}.
+$$
+
+This is the composite rotation matrix for the orbital Euler angle sequence, but what about the orbit ephemeris sequence?
+
+An orbit ephemeris of an orbiting object is a tabulation of the Earth's longitude and latitude of a body as a function of time. The orbit ephemeris specifies, at any time, the location on the surface of Earth in the geocentric radial direction of a satellite. In Figure 4, we see that point $R$ represents the radial direction. The longitude and the latitude of point $P$ are on the surface of the Earth.
+
+The orbital sequence shown in Figure 3 takes the internally fixed reference frame into the orbit frame with the x-axis through the point $P$ which lies on the geocentric line to the orbiting object. The orbit ephemeris is the latitude and longitude of point $p$ on the surface of Earth and to find out what it is we consider the aerospace Euler angle sequence $zyx$.
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Screenshot 2024-07-13 at 3.45.28 PM.png}
+    \caption{Euler Angle Orbit Ephemeris Sequence}
+    \label{fig:enter-label}
+\end{figure}
+
+The rotation about the Z-axis is through angle $\sigma$ such that the x-axis overlaps with the line $OQ$ in Figure 4. The rotation about the y-axis is through an angle $-L$ such that the x-axis overlaps with the line $OR$. The rotation about the x-axis is through an angle of $\alpha$ such that the y-axis rotates into the orbital plane $NOR$. This result is the same as the orbit frame in the orbit sequence.
+
+We also define $\lambda_0$ as the locator of the zero longitude on the surface of Earth with respect to the X-axis of the inertially-fixed frame. The variables $\nu,\alpha,L,$ and $\sigma$ are time-based functions of the orbital angular rate $\omega_0$ and the Earth's angular rate $\omega_e$. To summarize, all the parameters we have thus far are as follows:
+$$\omega=\text{angle to orbit ascending node } N,$$
+$$\alpha=\text{orbit ephemeris path direction angle},$$
+$$\iota=\text{the orbital angle of inclination},$$
+$$L=\text{Earth-latitude of orbiting object},$$
+$$\lambda=\text{Earth-longitude of orbiting object},$$
+$$\lambda_0=\text{locator of the zero longitude on the surface of Earth},$$
+$$\sigma=\lambda+\lambda_0,$$
+$$\nu=\text{the argument of the latitude to the orbiting object}.$$
+
+The orbit ephemeris sequence shown in Figure 5 can be represented by the following matrix product:
+$$R=R_{\alpha}^xR_{-L}^yR_{\sigma}^z,$$
+$$R=R_{\alpha}^x\begin{bmatrix}
+\cos L & 0 & \sin L\\
+0 & 1 & 0\\
+-\sin L & 0 & \cos L
+\end{bmatrix}
+\begin{bmatrix}
+\cos\sigma & \sin\sigma & 0\\
+-\sin\sigma & \cos\sigma & 0\\
+0 & 0 & 1
+\end{bmatrix},$$
+
+$$R=\begin{bmatrix}
+1 & 0 & 0\\
+0 & \cos\alpha & \sin\alpha\\
+0 & -\sin\alpha & \cos\alpha
+\end{bmatrix}
+\begin{bmatrix}
+\cos L\cos\sigma & \cos L\sin\sigma & \sin L\\
+-\sin\sigma & \cos\sigma & 0\\
+-\sin L\cos\sigma & -\sin L\sin\sigma & \cos L
+\end{bmatrix},$$
+
+$$R=\begin{bmatrix}
+\cos\sigma \cos L & \sin\sigma\cos L& \sin L\\
+(-\cos\sigma\sin L\sin\alpha-\sin\sigma\cos\alpha) & (-\sin\sigma\sin L\sin\alpha+\cos\sigma\cos\alpha) & \cos L\sin\alpha\\
+(-\cos\sigma\sin L\cos\alpha+\sin\sigma\sin\alpha) & (-\sin\sigma\sin L\cos\alpha-\cos\sigma\sin\alpha) & \cos L\cos\alpha
+\end{bmatrix}.$$
+
+We know that both these angle sequences, $R$ and $S$ are equal so we can set corresponding elements equal. For example, we can set the element in the first row and third column of both rotation matrices equal to each other:
+$$\sin L=\sin\iota\sin\nu.$$
+Now, we can divide each element in the second row and third column by the element in the third row and third column, resulting in:
+$$\frac{\cos L\sin\alpha}{\cos L\cos\alpha}=\tan{\alpha}=\frac{\sin\iota\cos\nu}{\cos\iota}=\tan\iota\cos\nu.$$
+
+Now, we divide the second element in the first row by the first element in the first row and set the resulting fractions equal to each other:
+$$\frac{\sin\sigma\cos L}{\cos\sigma\cos L}=\tan\sigma=\frac{\sin\Omega\cos\nu+\cos\Omega\cos\iota\sin\nu}{\cos\Omega\cos\nu-\sin\Omega\cos\iota\sin\nu}.$$
+We can divide this last fraction by $\cos\Omega\cos\nu$ to get:
+$$\tan\sigma=\frac{\tan\Omega+\cos\iota\tan\nu}{1-\tan\Omega\cos\iota\tan\nu}.$$
+
+We can now use these equations:
+$$\sin L=\sin\iota\sin\nu,$$
+$$\tan\alpha=\tan\iota\cos\nu,$$
+$$\tan\sigma=\frac{\tan\Omega+\cos\iota\tan\nu}{1-\cos\iota\tan\nu\tan\Omega}.$$
+
+To determine, at any point in time, the latitude $l$ to the orbiting object as well as the angle $\sigma$. With the angle $\sigma$ and $\lambda_0$ we can calculate the longitude $\lambda$ to the orbiting object. The angle $\alpha$ is related to the path direction of the ephemeris. That is, we can use these three equations to find the orbit ephemeris at any given time. However, we have only looked at the Euler angles version of both the orbit Euler angle sequence and the orbit ephemeris sequence. So, now we will examine the quaternion version.
+
+We shall begin by figuring out the quaternion equivalent for the orbit Euler Angle sequence. Much like when we were deriving the quaternion form of the aerospace sequence, we begin with defining half angles.
+
+$$\omega=\frac{1}{2}\Omega,$$
+$$\beta=\frac{1}{2}\iota,$$
+$$\gamma=\frac{1}{2}\nu.$$
+
+The quaternion product necessary to produce the composite rotation operator is done by:
+$$q=q_{z,\Omega}q_{x,\iota}q_{z,\nu}.$$
+We can find this product by first computing the product of the last two terms:
+$$q_{y,\theta}q_{z,\nu}=(\cos\beta+i\sin\beta)(\cos\gamma+k\sin\gamma)=\cos\beta\cos\gamma+i\sin\beta\cos\gamma-j\sin\beta\sin\gamma+k\cos\beta\sin\gamma.$$
+
+Given this, we can compute $q_{z,\Omega}q_{x,\iota}q_{z,\nu}$ as $q_0+iq_1+jq_2+kq_3$. So:
+$$q=q_0+iq_1+jq_2+kq_3.$$
+Such that:
+$$q_0=\cos\omega\cos\beta\cos\gamma-\sin\omega\sin\beta\sin\gamma,$$
+$$q_1=\cos\omega\sin\beta\cos\gamma+\sin\omega\sin\beta\sin\gamma,$$
+$$q_2=-\cos\omega\sin\beta\sin\gamma+\sin\omega\sin\beta\cos\gamma,$$
+$$q_3=\cos\omega\cos\beta\sin\gamma+\sin\omega\cos\beta\cos\gamma.$$
+So if the composite rotation angle is $\delta$ is:
+$$\cos\frac{\delta}{2}=q_0=\cos\omega\cos\beta\cos\gamma-\sin\omega\cos\beta\sin\gamma.$$
+The rotation axis can be defined by:
+$$v=(v_1,v_2,v_3)=(q_1,q_2,q_3).$$
+Where $q_1,q_2,q_3$ are defined above.
+Using this set of equations, we have a relatively easy set of computations to calculate the orbit sequence. Note that, once again the quaternionic version immediately provides the expression for the rotation axis whereas the matrix we obtain from the Euler angle version makes it more difficult to get a rotation axis. We will now examine the quaternionic version of the orbit ephemeris sequence.
+
+Just like in the previous sequences, we begin by deriving the quaternionic orbit ephemeris sequence using half-angle identities.
+$$\mu=\frac{1}{2}\sigma,$$
+$$\epsilon=\frac{1}{2} L,$$
+$$\rho=\frac{1}{2}\alpha.$$
+The quaternions representing the three rotations in the composite rotation operator are:
+$$q_{z,\sigma}=\cos\mu+k\sin\mu,$$
+$$q^{*}_{y,L}=\cos\epsilon-j\sin\epsilon,$$
+$$q_{x,\alpha}=\cos\rho+i\sin\rho.$$
+The orbit ephemeris sequence is found by the following product:
+$$(\cos\mu+k\sin\mu)(\cos\epsilon-j\sin\epsilon)(\cos\rho+i\sin\rho).$$
+
+$$=\cos\mu\cos\epsilon\cos\rho-\sin\mu\sin\epsilon\sin\rho+i(\cos\mu\cos\epsilon\sin\rho+\sin\mu\sin\epsilon\cos\rho),$$
+$$+j(\sin\mu\cos\epsilon\sin\rho-\cos\mu\sin\epsilon\cos\rho)+k(\cos\mu\sin\epsilon\sin\rho+\sin\mu\cos\epsilon\cos\rho).$$
+
+As we have stated before, ephemeris sequence and the orbit sequence are equivalent, so we can state that:
+$$q_{z,\sigma}q^{*}_{y,L}q_{x,\alpha}=q_{z,\Omega}q_{x,iota}q_{z,nu}$$
+If we multiply both sides of the equation by $q^{*}_{z,\sigma}$ followed by multiplying both sides by $\psi=2\tau=\Omega-\sigma$, we get:
+$$q_{y,L}q_{x,\alpha}=q_{z,\psi}q_{x,\iota}q_{z,\nu},$$
+The quaternions in this product can be defined as follows:
+$$q_{z,\Omega}=\cos\omega+k\sin\omega,$$
+$$q_{x,\iota}=\cos\beta+i\sin\beta,$$
+$$q_{z,nu}=\cos\gamma+k\sin\gamma,$$
+$$q^{*}_{y,L}=\cos\epsilon-j\sin\epsilon,$$
+$$q_{z,\psi}=\cos\tau+k\sin\tau\text{ where }\tau=\frac{\psi}{2}.$$
+
+If we set $p=q^{*}_{y,L}q_{x,\alpha}$ and $r=q_{z,\psi}q_{x,\iota}q_{z,\nu}$, we can write that:
+$$p=p_0+ip_1+jp_2+kp_3=(\cos\epsilon-j\sin\epsilon)(\cos\rho+i\sin\rho),$$
+$$r=r_0+ir_1+jr_2+kr_3=(\cos\tau+k\sin\tau)(\cos\beta+i\sin\beta)(\cos\gamma+k\sin\gamma).$$
+
+We can now form a connection between $p$ and $r$ by equating corresponding terms. When we do this, we will get:
+$$(1) \hspace{0.5cm}p_0=\cos\epsilon\cos\rho=\cos\tau\cos\beta\cos\gamma-\sin\tau\cos\beta\sin\gamma=r_0,$$
+$$(2) \hspace{0.5cm}p_1=\cos\epsilon\sin\rho=\cos\tau\sin\beta\cos\gamma+\sin\tau\sin\beta\sin\gamma=r_1,$$
+$$(3) \hspace{0.5cm}p_2=-\sin\epsilon\cos\rho=-\cos\tau\sin\beta\sin\gamma+\sin\tau\sin\beta\cos\gamma=r_2,$$
+$$(4) \hspace{0.5cm}p_3=\sin\epsilon\sin\rho=\cos\tau\cos\beta\sin\gamma+\sin\tau\cos\beta\cos\gamma=r_3,$$
+We can simplify all of these equations as the following:
+$$(5) \hspace{0.5cm}\cos\epsilon\cos\rho=\cos\beta\cos(\gamma+\tau),$$
+$$(6) \hspace{0.5cm}\cos\epsilon\sin\rho=\sin\beta\cos(\gamma-\tau),$$
+$$(7) \hspace{0.5cm}\sin\epsilon\cos\rho=\sin\beta\sin(\gamma-\tau),$$
+$$(8) \hspace{0.5cm}\sin\epsilon\sin\rho=\cos\beta\sin(\gamma+\tau),$$
+If we divide equations 5 and 6, we get:
+$$(9) \hspace{0.5cm}\frac{\tan\rho}{\tan\beta}=\frac{\cos(\gamma-\tau)}{\cos(\gamma+\tau)},$$
+If we divide equations 7 and 8, we get:
+$$(10) \hspace{0.5cm}\tan{\rho}\tan{\beta}=\frac{\sin(\gamma+\tau)}{\sin(\gamma-\tau)},$$
+If we divide equation 10 by equation 9, we get:
+$$\tan^2\beta=\frac{\sin 2(\gamma+\tau)}{\sin 2(\gamma-\tau)}.$$
+If we set $2\tau=\Omega-\sigma$ shift the equation around a little and use the correct identities, we can rewrite the above equation as:
+$$\tan\sigma=\frac{\tan\Omega+\tan\nu\cos\iota}{1-\tan\Omega\tan\nu\cos\iota}.$$
+We can now divide equations 8 and 5 to get:
+$$(11) \hspace{0.5cm}\tan\rho\tan\epsilon=\tan(\gamma+\tau),$$
+We also divide equations 7 and 6 to get:
+$$(12) \hspace{0.5cm}\frac{\tan\epsilon}{\tan\rho}=\tan(\gamma-\tau).$$
+We can now divide equations 11 and 12 to get:
+$$\tan^2\rho=\frac{\tan(\gamma+\tau)}{\tan(\gamma-\tau)}.$$
+Here, we can state that $\alpha=2\rho$; the parameter $\alpha$ is associated with the direction of the orbit ephemeris path at any time. These equations also help us plot the points $(\lambda, L)$ which represent the ephemeris path. 
+\section{Conclusion and Acknowledgements}
+There are many, many more applications for quaternions from video game graphics to phone orientation. They all involve the unique fact that quaternions are astonishingly good at modeling things in our three-dimensional world despite being four-dimensional objects. The rotation operator and the Euler angle sequences mentioned here are used for all sorts of modeling algorithms and programs and they are essential for the world we know now. I would like to thank Simon Rubinstein-Salzedo and Sawyer Dobson for all the advice they have given me without which I could not have written this paper.
+\medskip
+
+\clearpage
+
+
+
+\begin{thebibliography}{9}
+\bibitem{quatoct} Conway, John H., and Derek A. Smith. On quaternions and octonions. AK Peters/CRC Press, 2003.
+\bibitem{knuthwebsite} Axler, Sheldon. Linear algebra done right. Springer Nature, 2024.
+\bibitem{kuiper} Kuipers, Jack B. Quaternions and rotation sequences: a primer with applications to orbits, aerospace, and virtual reality. Princeton University Press, 1999.
+
+\end{thebibliography}
+
+
+
+
+\end{document}
+
+
